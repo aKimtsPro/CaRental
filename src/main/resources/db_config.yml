@@ -1,0 +1,6 @@
+carental:
+  host: localhost
+  port: 5432
+  db_name: carental
+  user: postgres
+  password: root
