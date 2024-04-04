@@ -9,7 +9,19 @@ public class Main {
         System.out.println("test");
         ORMLoader ormLoader = ORMLoader.getLoader("carental");
         IRepository<Role, Long> repo = ormLoader.getRepo(Role.class);
+
         repo.getAll().forEach(System.out::println);
+
+        Role role = new Role();
+        role.setName("mon role");
+
+        role = repo.insert(role);
+
+        role.setDescription("ma description");
+
+        role = repo.update(role);
+
+        repo.delete(role.getId());
     }
 
 //    private static Reflections reflections = new Reflections(Main.class.getPackage());

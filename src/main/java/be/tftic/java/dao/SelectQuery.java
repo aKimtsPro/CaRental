@@ -38,7 +38,7 @@ public class SelectQuery<T> extends Query {
             try(
                     ResultSet rs = stmt.executeQuery();
             ) {
-                if( rs.first() ){
+                if( rs.next() ){
                     return Optional.of(extractor.extract(rs));
                 }
                 return Optional.empty();
