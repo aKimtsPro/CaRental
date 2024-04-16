@@ -1,32 +1,40 @@
 package be.tftic.java;
 
-import be.tftic.java.entity.Role;
-import be.tftic.java.orm.ORMLoader;
-import be.tftic.java.orm.repository.IRepository;
+import be.tftic.java.domain.models.entity.Role;
+import be.tftic.java.domain.models.entity.User;
+import be.tftic.java.dal.orm.ORMLoader;
+import be.tftic.java.dal.orm.repository.IRepository;
+import org.reflections.Reflections;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("test");
         ORMLoader ormLoader = ORMLoader.getLoader("carental");
-        IRepository<Role, Long> repo = ormLoader.getRepo(Role.class);
-
-        repo.getAll().forEach(System.out::println);
 
         Role role = new Role();
         role.setName("mon role");
 
-        role = repo.insert(role);
+        role = ormLoader.getRepo(Role.class).insert(role);
 
-        role.setDescription("ma description");
+        User user = new User();
+        user.setUsername("user");
+        user.setPassword("pass");
+        user.setRole(role);
 
-        role = repo.update(role);
+        IRepository<User,Long> userRepo = ormLoader.getRepo(User.class);
 
-        repo.delete(role.getId());
+        User create = userRepo.insert(user);
+        Role userRole = create.getRole();
+
+        List<User> users = userRole.getUsers();
+        System.out.println("fin");
     }
 
-//    private static Reflections reflections = new Reflections(Main.class.getPackage());
+    private static Reflections reflections;
 
-//    public static Reflections getReflections(){
-//        return reflections;
-//    }
+    public static Reflections getReflections(){
+        return reflections == null ? reflections = new Reflections(Main.class.getPackageName()) : reflections;
+    }
 }
